@@ -29,24 +29,22 @@
     <a class="download-link" href="{{ download_url }}">Download Zipped Files</a>
 
     <h2>Individual Files</h2>
-    <ul>
-        {% for file_url in file_urls %}
-            <li><a href="{{ file_url }}">Download {{ file_url|slice:"-6:" }}</a></li>
-        {% endfor %}
-    </ul>
+
 
     <div id="image-container">
         
             {% for file_url in file_urls %}
                 <div class="box">
                     <img src="{{ file_url }}" alt="Image">
-                    <span class="serial">
-                        {% if "/" in file_url|slice:"-6:" %}
-                            {{ file_url|slice:"-5:" }}
-                        {% else %}
-                            {{ file_url|slice:"-6:" }}
-                        {% endif %}
-                    </span>                 
+                   <a href="{{ file_url}}" download>
+                        <span class="serial">
+                            {% if "/" in file_url|slice:"-6:" %}
+                                {{ file_url|slice:"-5:" }}
+                            {% else %}
+                                {{ file_url|slice:"-6:" }}
+                            {% endif %}
+                        </span>         
+                    </a>                 
                 </div>
             {% endfor %}
         
