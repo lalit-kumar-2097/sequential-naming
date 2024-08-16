@@ -1,57 +1,9 @@
-# from django.shortcuts import render
-
-# # Create your views here.
-
-# import os
-# import zipfile
-# from django.shortcuts import render
-# from django.conf import settings
-# from django.core.files.storage import FileSystemStorage
-# from django.http import HttpResponse
-# from django.utils.text import slugify
-
-# def upload_files(request):
-#     if request.method == 'POST':
-#         uploaded_files = request.FILES.getlist('files')
-#         if len(uploaded_files) > 50:
-#             return HttpResponse("You can only upload up to 50 files.")
-
-#         # Store files
-#         fs = FileSystemStorage()
-#         upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
-#         if not os.path.exists(upload_dir):
-#             os.makedirs(upload_dir)
-
-#         # Save files and rename them sequentially
-#         for i, file in enumerate(uploaded_files):
-#             new_name = f"{i + 1}{os.path.splitext(file.name)[1]}"
-#             fs.save(os.path.join('uploads', new_name), file)
-
-#         # Zip the files
-#         zip_filename = 'renamed_files.zip'
-#         zip_filepath = os.path.join(settings.MEDIA_ROOT, zip_filename)
-#         with zipfile.ZipFile(zip_filepath, 'w') as zipf:
-#             for i in range(len(uploaded_files)):
-#                 filename = f"{i + 1}{os.path.splitext(uploaded_files[i].name)[1]}"
-#                 file_path = os.path.join(upload_dir, filename)
-#                 zipf.write(file_path, os.path.basename(file_path))
-
-#         download_url = fs.url(zip_filename)
-#         return render(request, 'uploader/upload.html', {'download_url': download_url})
-
-#     return render(request, 'uploader/upload.html')
-
-
-
-
-
-
 import os
 import zipfile
 import uuid
 from django.shortcuts import render
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
+from django.core.files.storage import default_storage
 from django.http import HttpResponse
 
 def upload_files(request):
@@ -63,27 +15,57 @@ def upload_files(request):
         # Generate a unique ID for the session
         unique_id = str(uuid.uuid4())
 
-        # Store files in a unique directory
-        fs = FileSystemStorage()
-        upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads', unique_id)
-        if not os.path.exists(upload_dir):
-            os.makedirs(upload_dir)
+        # Directories for files with and without extensions
+        dir_with_ext = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{unique_id}_with_ext')
+        dir_without_ext = os.path.join(settings.MEDIA_ROOT, 'uploads', f'{unique_id}_without_ext')
 
-        # Save files and rename them sequentially without extensions
+        # Create the directories if they don't exist
+        os.makedirs(dir_with_ext, exist_ok=True)
+        os.makedirs(dir_without_ext, exist_ok=True)
+
+        # Save files and rename them sequentially
+        file_urls = []
         for i, file in enumerate(uploaded_files):
-            new_name = str(i + 1)  # Just the number, no extension
-            fs.save(os.path.join('uploads', unique_id, new_name), file)
+            # New names with and without extensions
+            base_name = str(i + 1)
+            ext = os.path.splitext(file.name)[1]
+            new_name_with_ext = f"{base_name}{ext}"
+            new_name_without_ext = base_name
 
-        # Zip the files with a unique name
+            # Save files to both directories
+            safe_path_with_ext = os.path.join(dir_with_ext, new_name_with_ext)
+            safe_path_without_ext = os.path.join(dir_without_ext, new_name_without_ext)
+
+            with open(safe_path_with_ext, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+
+            with open(safe_path_without_ext, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+
+            # Store the relative URL for the file with the extension
+            file_urls.append(os.path.join('uploads', f'{unique_id}_with_ext', new_name_with_ext))
+
+        # Zip the files in the directory without extensions
         zip_filename = f'renamed_files_{unique_id}.zip'
         zip_filepath = os.path.join(settings.MEDIA_ROOT, zip_filename)
         with zipfile.ZipFile(zip_filepath, 'w') as zipf:
             for i in range(len(uploaded_files)):
-                filename = str(i + 1)  # Just the number, no extension
-                file_path = os.path.join(upload_dir, filename)
+                filename = str(i + 1)
+                file_path = os.path.join(dir_without_ext, filename)
                 zipf.write(file_path, os.path.basename(file_path))
 
-        download_url = fs.url(zip_filename)
-        return render(request, 'uploader/upload.html', {'download_url': download_url})
+        # Generate download URL for the zip file
+        download_url = default_storage.url(zip_filename)
+        
+        # Prepend MEDIA_URL to each file URL
+        file_urls = [default_storage.url(file_url) for file_url in file_urls]
+
+        return render(request, 'uploader/upload.html', {
+            'download_url': download_url,
+            'file_urls': file_urls,
+        })
 
     return render(request, 'uploader/upload.html')
+
