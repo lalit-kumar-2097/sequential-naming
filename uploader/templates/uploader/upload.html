@@ -1,0 +1,60 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Rename Files</title>
+</head>
+<body>
+    <h1>Upload Your Files</h1>
+    <form method="POST" enctype="multipart/form-data" id="upload-form">
+        {% csrf_token %}
+        <input type="file" name="files" multiple required>
+        <input type="submit" value="Upload">
+    </form>
+    {% if download_url %}
+        <a href="{{ download_url }}">Download Zipped Files</a>
+    {% endif %}
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Rename Files</title>
+    <!-- Load the static files -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <!-- <h1>Upload Your Files</h1> -->
+
+    <div class="navbar">
+        <div class="container">
+            <label for="imageList" class="label_class">Upload Your Files (Max 50):</label><br>        
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="upload-form">
+            <form method="POST" enctype="multipart/form-data" id="upload-form">
+                {% csrf_token %}
+                <input type="file" name="files" multiple required>
+                <input class="upload-button"  type="submit" value="Upload">
+            </form>
+        </div>
+        {% if download_url %}
+        <a class="download-link" href="{{ download_url }}">Download Zipped Files</a>
+        {% endif %}
+    </div>
+
+    
+
+    <!-- Include JavaScript at the bottom of the body -->
+    <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>

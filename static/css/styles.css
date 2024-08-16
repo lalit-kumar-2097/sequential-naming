@@ -1,0 +1,196 @@
+body {
+    margin:0;
+    background-color: #f8f8f8;
+}
+
+.container{
+    width: 80%;
+    margin: auto;
+}
+
+.navbar {
+    overflow: hidden;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    /* background-image: linear-gradient(to right, rgb(4 8 18), rgb(48,97,215)); */
+    /* background: rgb(48, 97, 215); */
+    color: #ffffff;
+    padding-top: 30px;
+    padding-bottom: 40px;
+    border-bottom: #669bff 4.5px solid;
+    /* font-family: Roboto;
+    font-size: x-large;
+    font-weight: 300; */
+    z-index: 3;
+}
+
+video-player{
+    z-index: 1;
+}
+.navbar textarea {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: left;
+  /* padding: 14px 16px; */
+  text-decoration: none;
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+
+.navbar textarea:hover {
+  background: rgb(247, 247, 247);
+  color: black;
+}
+
+button {
+    float: right;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 13px;
+    margin-left: 2.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    color: white;
+    border: none;
+    background-color: #2666d6;
+}
+
+button:hover{
+        background-color:mediumblue;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        cursor: pointer;
+}
+
+.play-button{
+    background-color: #4CAF50;
+}
+
+.play-button:hover{
+        background-color:rgb(10, 125, 25);
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        cursor: pointer;
+        }
+
+.main {
+  padding: 20px;
+  margin-top: 120px;
+  height: auto; /* Used in this example to enable scrolling */
+  background-color: #f8f8f8;
+}
+
+.label_class{
+    font-family: sans-serif;
+    color: #6c6c6c;
+    font-size: larger;
+    font-weight: lighter;
+}
+
+/* New Classes */
+#image-container{
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(1fr);
+            grid-row-gap: 1rem;
+        }       
+
+        .box{
+            border: 0.7px solid grey;
+            padding: 15px;
+            overflow-wrap: break-word;
+            height: 8rem;
+            width: 100px;
+        }
+
+        .box img{
+            /* height: auto;
+            width: 100%;
+            margin: auto;
+            max-height: -webkit-fill-available; */
+            display: -webkit-box;
+            max-width: -webkit-fill-available;
+            margin: auto;
+            max-height: 60%;
+            align-items: center;
+
+        }
+
+        .box video{
+            height: auto;
+            width: 100%;
+            margin: auto;
+            max-height: -webkit-fill-available;
+        }
+
+        input{
+            margin-top: 0.5rem;
+            width: 200px;
+            height: 30px;
+        }
+
+    footer {
+        height: 2em;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        /* background-color: rgb(48, 97, 215); */
+        background-image: linear-gradient(15deg, rgb(4 8 18), rgb(48,97,215));
+        color:white;
+        align-items: center;
+        height: 50px;    
+    
+
+        font-family: sans-serif;
+        font-size: inherit;
+        font-weight: 300;
+        text-align: center;
+}
+
+    .serial{
+        padding-top: 1.98rem;
+        color: lightslategrey;
+    }
+    .resolution{
+        color: lightslategrey;
+    }
+    .les_resolution{
+        color:darkred;
+        font-weight: bold;
+    }    
+
+#upload-form{
+    margin-top: 150px;
+    margin-bottom:70px;    
+}
+
+.upload-button {
+        float: right;
+        text-align: center;
+        text-decoration: none;
+        height: 45px;
+        font-size: 16px;
+        margin-left: 2.5rem;
+        margin-bottom: 0.5rem;
+        border-radius: 8px;
+        color: white;
+        border: none;
+        background-color: #4CAF50;
+    }
+
+.upload-button:hover{
+    background-color:rgb(10, 125, 25);
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    cursor: pointer;
+    }
+
+.download-link{
+    color: white;
+}
+
+a.download-link:link {color:#2666d6;text-decoration:none;}
+a.download-link:visited {color:#ffff;text-decoration:none;}
+a.download-link:hover {font-family:monospace;text-decoration:none;}
+
